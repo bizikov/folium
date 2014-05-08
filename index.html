@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Folium - простой слайдер изображений.</title>
+    <script type="text/javascript" src="folium.js"></script>
+    <style>
+            /* Стили для страницы */
+        body {
+            margin  : 0;
+            padding : 0;
+        }
+
+        .container {
+            width  : 960px;
+            margin : 0 auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!--
+        Слайдер фотографий. Указываем в теге figure c классом folium список фотографий.
+        Если нужно вывести описание к фотографии, то нужно добавить описание в атрибут atl
+    -->
+    <h1>Folium - простой слайдер изображений</h1>
+    <figure class="folium">
+        <img src="img/zenitE.jpg" alt="Атмосферная фотография еды." />
+        <img src="img/cactus.jpg" alt="Иголки кактуса, снято с использованием макроколец" />
+        <img src="img/menu.jpg" alt="Что бы покушать?" />
+    </figure>
+</div>
+
+</body>
+</html>
