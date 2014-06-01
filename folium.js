@@ -1,45 +1,18 @@
 /**
  * Folium - простой слайдер изображений
  * User: Bizikov
- * Version: 0.1
+ * Version: 0.2
  */
 
 
 (function () {
-    var folium = findElement('#folium');
-    var numberOfImages = 0;
-    var images = 0;
-    var currentImages = 0;
+    var folium = document.getElementsByClassName('folium');
 
-    /*
-     *  Поиск элемента
-     */
-    function findElement(name) {
-        var attr = name[0] === '.' ? 'class' : 'id';
-        var elementName = name.substr(1);
-        var foundElement = [];
-        switch (attr) {
-            case 'class':
-                if (document.getElementsByClassName) {
-                    foundElement = document.getElementsByClassName(elementName);
-                    return foundElement.length ? foundElement : null;
-                } else {
-                    return null;
-                }
-                break;
-            case 'id':
-            default:
-                if (document.getElementById) {
-                    foundElement = document.getElementById(elementName);
-                    return foundElement ? foundElement : null;
-                } else {
-                    return null;
-                }
-        }
-    }
-
-    /*
+    /**
      *  Создает указанный элемент, при необходимости задает ему атрибут с именем.
+     *  @param <string> element
+     *  @param <string> name
+     *  @return <element>
      */
     function createElement(element, name) {
         var unit = document.createElement(element);
@@ -48,69 +21,75 @@
         return unit;
     }
 
-    /*
-     *   Изменяем описание к изображению
+
+    /**
+     *  Изменяем описание к изображению
+     *  @param <element> slide
+     *  @param <element> image
      */
-    function changeСaption(image) {
+    function changeDescription(slide, image) {
         var alt = image.getAttribute('alt');
-        var figcaption = findElement('.folium--caption');
-        if (figcaption) {
-            figcaption[0].textContent = alt;
+        var figCaption = slide.getElementsByClassName('folium--caption');
+        if (figCaption.length) {
+            figCaption[0].textContent = alt;
         } else {
-            figcaption = createElement('figcaption', '.folium--caption');
-            figcaption.textContent = alt;
-            folium.appendChild(figcaption);
+            figCaption = createElement('figcaption', '.folium--caption');
+            figCaption.textContent = alt;
+            slide.appendChild(figCaption);
         }
 
     }
 
-    /*
-     *  Работаем с изображениями
+    /**
+     *  Инициализируем слайдер
+     *  @param <element> item
      */
-    function findOnlyImages(array) {
+    function initSlider(item) {
+        var currentImage = 0;
         var images = [];
-        for (var i = 0; i < array.length; i++) {
-            if (array[i].tagName.toLowerCase() === 'img') {
-                images.push(array[i]);
+        var foliumNavigationItem;
+        var foliumNavigation = createElement('ul', '.folium--navigation');
+
+        // Выбираем только фотографии
+        for (var i = 0; i < item.children.length; i++) {
+            if (item.children[i].tagName.toLowerCase() === 'img') {
+                images.push(item.children[i]);
             }
         }
-        return images;
-    }
 
-    // Собираем фотографии
-    images = findOnlyImages(folium.children);
-    // Прячем все изображения, кроме первого
-    for (var i = 1; i < images.length; i++) {
-        images[i].style.display = 'none';
-    }
-    // Добавляем описание к фотографии, если оно есть
-    changeСaption(images[0]);
-    // Добавляем навигацию
-    var foliumNavigation = createElement('ul', '.folium--navigation');
-    var foliumNavigationItem;
-
-    for (var k = 0; k < images.length; k++) {
-        foliumNavigationItem = createElement('li', '.folium--navigation--item');
-        foliumNavigationItem.setAttribute('data-count', k.toString());
-        foliumNavigation.appendChild(foliumNavigationItem);
-    }
-    foliumNavigation.children[currentImages].setAttribute('class', 'folium--navigation--item__current'); // Выделяем сразу первый по умолчанию
-    folium.insertBefore(foliumNavigation, folium.firstChild);
-
-
-    /*
-     Обработка кликов по элементам навигации
-     */
-    foliumNavigation.addEventListener('click', function (e) {
-        var element = e.target;
-        var selectedId = element.getAttribute('data-count');
-        if (selectedId) {
-            foliumNavigation.children[currentImages].setAttribute('class', 'folium--navigation--item');
-            element.setAttribute('class', 'folium--navigation--item__current');
-            images[currentImages].style.display = 'none';
-            images[selectedId].style.display = 'block';
-            changeСaption(images[selectedId]);
-            currentImages = selectedId;
+        // Скрываем все фотографии, кроме первой
+        for (var img = 1; img < images.length; img++) {
+            images[img].style.display = 'none';
         }
-    }, false);
+
+        // Добавляем навигацию
+        for (var nav = 0; nav < images.length; nav++) {
+            foliumNavigationItem = createElement('li', '.folium--navigation--item');
+            foliumNavigationItem.setAttribute('data-count', nav.toString());
+            foliumNavigation.appendChild(foliumNavigationItem);
+        }
+
+        changeDescription(item, images[0]);
+        foliumNavigation.children[currentImage].setAttribute('class', 'folium--navigation--item__current');
+        item.insertBefore(foliumNavigation, item.firstChild);
+
+        // Обработка кликов по элементам навигации в слайдере
+        foliumNavigation.addEventListener('click', function (e) {
+            var element = e.target;
+            var selectedId = element.getAttribute('data-count');
+            if (selectedId) {
+                foliumNavigation.children[currentImage].setAttribute('class', 'folium--navigation--item');
+                element.setAttribute('class', 'folium--navigation--item__current');
+                images[currentImage].style.display = 'none';
+                images[selectedId].style.display = 'block';
+                changeDescription(item, images[selectedId]);
+                currentImage = selectedId;
+            }
+        }, false);
+    }
+
+    // Инициализируем слайдеры
+    for (var slider = 0; slider < folium.length; slider++) {
+        initSlider(folium[slider]);
+    }
 })();
