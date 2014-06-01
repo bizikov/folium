@@ -1,5 +1,5 @@
 /* Стили для слайдера */
-#folium {
+.folium {
     position: relative;
     width: 960px;
     /*height: 645px;*/
@@ -9,7 +9,7 @@
 }
 
 /* Фотогрфия */
-#folium img {
+.folium img {
     display: block;
     max-width: 100%;
     height: auto;
