@@ -5,11 +5,11 @@
  */
 
 
-(function () {
+function folium() {
     var folium = document.getElementsByClassName('folium');
 
     /**
-     *  Создает указанный элемент, при необходимости задает ему атрибут с именем.
+     *  Создаем указанный элемент, при необходимости задает ему атрибут с именем.
      *  @param <string> element
      *  @param <string> name
      *  @return <element>
@@ -20,7 +20,6 @@
         unit.setAttribute(attr, name.substr(1));
         return unit;
     }
-
 
     /**
      *  Изменяем описание к изображению
@@ -69,7 +68,7 @@
             foliumNavigation.appendChild(foliumNavigationItem);
         }
 
-        changeDescription(item, images[0]);
+        changeDescription(item, images[currentImage]);
         foliumNavigation.children[currentImage].setAttribute('class', 'folium--navigation--item__current');
         item.insertBefore(foliumNavigation, item.firstChild);
 
@@ -88,8 +87,12 @@
         }, false);
     }
 
-    // Инициализируем слайдеры
+    // Инициализируем все слайдеры
     for (var slider = 0; slider < folium.length; slider++) {
         initSlider(folium[slider]);
     }
-})();
+};
+
+window.onload = function(){
+    folium();
+}
