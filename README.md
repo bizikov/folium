@@ -3,7 +3,7 @@ Folium
 
 Простой слайдер изображений.
 
-[Демо](http://folium.bizikov.ru/).
+[Демо](http://bizikov.github.io/folium/).
 
 Изменения
 
